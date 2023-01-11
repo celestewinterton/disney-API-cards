@@ -1,8 +1,15 @@
-function Card() {
+function Card({ character }) {
   return (
     <div>
-      <h1>Hello from Card</h1>
-      <h2>frontend/src//Components/Card.js</h2>
+      <div>{character.name}</div>
+      <img src={character.imageUrl} />
+      {/* <div>{character.allies}</div>
+      <div>{character.enemies}</div>
+      <div>{character.films}</div>
+      <div>{character.tvShows}</div>
+      <div>{character.shortFilms}</div>
+      <div>{character.videoGames}</div>
+      <div>{character.videoGames}</div> */}
     </div>
   );
 }
