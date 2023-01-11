@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
-import Card from "./Components/Card";
+import CharacterCard from "./Components/CharacterCard";
+import { Button, Form } from "react-bootstrap";
+// import "bootstrap/dist/css/bootstrap.min.css"; // Don't need this?
 
 // Instructions
 // Create a React application that pulls data from this API (https://disneyapi.dev/)
@@ -27,11 +29,16 @@ function App() {
           .then((res) => res.json())
           .then((page) => {
             allCharacters = [...allCharacters, ...page.data];
-            console.log("calling getData from API", data);
+            console.log(
+              "calling getData from API",
+              page.nextPage[page.nextPage.length - 1]
+            );
             setData(allCharacters);
             setFilteredData(allCharacters);
 
-            if (page.nextPage) getData(page.nextPage);
+            // if (page.nextPage) getData(page.nextPage); // view all 7k+ results
+            if (page.nextPage && page.nextPage[page.nextPage.length - 1] < 3)
+              getData(page.nextPage); // view only first 100 results
           });
       };
 
@@ -47,7 +54,7 @@ function App() {
     let results = data.filter((character) =>
       character.name.toLowerCase().includes(e.target.value.toLowerCase())
     );
-    console.log(filter, results);
+
     setFilteredData(results);
   };
 
@@ -58,42 +65,76 @@ function App() {
 
   return (
     <div>
-      <h1>Disney Character Explorer</h1>
-      <label htmlFor="filter" className="">
-        Filter
-      </label>
-      <input value={filter} onChange={filterData}></input>
-      <button onClick={clearFilter}>X</button>
-      <button
-        onClick={(e) => setFilteredData(data.sort((a, b) => a.name - b.name))}
-      >
-        Sort by A-Z
-      </button>
+      <div className="container pt-4 pb-4">
+        <h1 id="top" className="pt-4">
+          Disney Character Explorer
+        </h1>
+        <div className="input-group mb-3 pt-4">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Search for characters by name"
+            aria-label="Username"
+            aria-describedby="basic-addon1"
+            value={filter}
+            onChange={filterData}
+          />
+          <button
+            class="input-group-text"
+            id="basic-addon1"
+            onClick={clearFilter}
+          >
+            Reset
+          </button>
+        </div>
 
-      {filter.length > 0 && <div>{filteredData.length} Results</div>}
+        <div className="d-flex justify-content-between">
+          <div>{filter.length > 0 && <>{filteredData.length} Results</>}</div>
+          <button
+            className="btn btn-light"
+            onClick={(e) =>
+              setFilteredData(filteredData.sort((a, b) => a.name - b.name))
+            }
+          >
+            Sort by A-Z
+          </button>
+        </div>
+      </div>
 
-      {filteredData.length > 0 && (
-        <ul>
-          {filteredData.slice(0, resultsCount).map((char, i) => (
-            <li key={i}>
-              <Card character={char} />
-            </li>
-          ))}
-        </ul>
-      )}
+      <div className="container">
+        {filteredData.length > 0 && (
+          <div className="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-2">
+            {filteredData.slice(0, resultsCount).map((char, i) => (
+              <div className="col">
+                <CharacterCard character={char} />
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
 
-      {resultsCount < filteredData.length && (
-        <button onClick={(e) => setResultsCount(resultsCount + 40)}>
-          View more
-        </button>
-      )}
-      {resultsCount > 40 && (
-        <button onClick={(e) => setResultsCount(resultsCount - 40)}>
-          View less
-        </button>
-      )}
+      <div className="container d-flex flex-row-reverse bd-highlight pt-4 pb-4">
+        {resultsCount < filteredData.length && (
+          <button
+            className="btn btn-light"
+            onClick={(e) => setResultsCount(resultsCount + 40)}
+          >
+            View more
+          </button>
+        )}
+        {resultsCount > 40 && (
+          <button
+            className="btn btn-light"
+            onClick={(e) => setResultsCount(resultsCount - 40)}
+          >
+            View less
+          </button>
+        )}
 
-      <button>Back to top</button>
+        <a href="#top">
+          <button className="btn btn-light">Back to top</button>
+        </a>
+      </div>
     </div>
   );
 }
