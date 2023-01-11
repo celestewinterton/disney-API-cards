@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 import CharacterCard from "./Components/CharacterCard";
-import { Button, Form } from "react-bootstrap";
-// import "bootstrap/dist/css/bootstrap.min.css"; // Don't need this?
 
 // Instructions
 // Create a React application that pulls data from this API (https://disneyapi.dev/)
@@ -37,7 +35,7 @@ function App() {
             setFilteredData(allCharacters);
 
             // if (page.nextPage) getData(page.nextPage); // view all 7k+ results
-            if (page.nextPage && page.nextPage[page.nextPage.length - 1] < 3)
+            if (page.nextPage && page.nextPage[page.nextPage.length - 1] < 9)
               getData(page.nextPage); // view only first 100 results
           });
       };
@@ -89,7 +87,9 @@ function App() {
         </div>
 
         <div className="d-flex justify-content-between">
-          <div>{filter.length > 0 && <>{filteredData.length} Results</>}</div>
+          <div className="text-muted">
+            {filter.length > 0 && <>{filteredData.length} Results</>}
+          </div>
           <button
             className="btn btn-light"
             onClick={(e) =>
