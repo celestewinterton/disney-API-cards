@@ -1,6 +1,6 @@
 <h1 align="center">Disney Character Explorer</h1>
 
-A simple application that takes data from the Disney API (https://disneyapi.dev/) and displays character cards with information on what films or shows they were featured in. The user also has the ability to search/filter cards by character name.
+A simple application that takes data from the [Disney API](https://disneyapi.dev/) and displays character cards with information on what films or shows they were featured in. The user also has the ability to search/filter cards by character name.
 
 ## Technologies Used
 
@@ -10,7 +10,7 @@ A simple application that takes data from the Disney API (https://disneyapi.dev/
 
 ## Getting started
 
-1. Clone this repository (Private repo)
+1. Clone this repository
 
    `git clone git@github.com:celestewinterton/disney-API-cards.git`
 
