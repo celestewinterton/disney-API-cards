@@ -11,3 +11,17 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+h1 {
+  /* font-family: 'Almendra Display', cursive; */
+  /* font-family: 'Amita', cursive; */
+  /* font-family: 'Cedarville Cursive', cursive; */
+  /* font-family: 'Klee One', cursive; */
+  /* font-family: 'Lobster Two', cursive; */
+  /* font-family: 'Mountains of Christmas', cursive; */
+  /* font-family: 'Princess Sofia', cursive; */
+}
+
+h5 {
+  font-family: 'Cedarville Cursive', cursive;
+}

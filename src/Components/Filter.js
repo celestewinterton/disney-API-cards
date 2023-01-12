@@ -31,7 +31,9 @@ const Filter = ({
         className="form-control"
         placeholder={
           inputDisabled
-            ? "Currently loading all characters..."
+            ? `Still loading characters... (${Math.round(
+                (data.length / 7500) * 100
+              )} %)`
             : "Search for characters by name"
         }
         aria-label="Username"
