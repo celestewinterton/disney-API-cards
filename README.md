@@ -1,4 +1,4 @@
-<h1 align="center"><img src="src/mickey.png" width="50" /> Disney Character Explorer</h1>
+<h1 align="center">Disney Character Explorer</h1>
 
 A simple application that takes data from the [Disney API](https://disneyapi.dev/) and displays character cards with information on what films or shows they were featured in. The user also has the ability to search/filter cards by character name.
 
