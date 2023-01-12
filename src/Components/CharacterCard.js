@@ -18,7 +18,7 @@ function CharacterCard({ character }) {
           <div>
             <div className="fw-bold">TV Shows</div>
             {character.tvShows.map((tvShow) => (
-              <div>{tvShow}</div>
+              <div key={tvShow}>{tvShow}</div>
             ))}
           </div>
         )}
@@ -26,7 +26,7 @@ function CharacterCard({ character }) {
           <div>
             <div className="fw-bold">Films</div>
             {character.films.map((film) => (
-              <div>{film}</div>
+              <div key={film}>{film}</div>
             ))}
           </div>
         )}
@@ -34,7 +34,7 @@ function CharacterCard({ character }) {
           <div>
             <div className="fw-bold">Short Films</div>
             {character.shortFilms.map((shortFilm) => (
-              <div>{shortFilm}</div>
+              <div key={shortFilm}>{shortFilm}</div>
             ))}
           </div>
         )}
@@ -42,7 +42,7 @@ function CharacterCard({ character }) {
           <div>
             <div className="fw-bold">Video Game</div>
             {character.videoGames.map((videoGame) => (
-              <div>{videoGame}</div>
+              <div key={videoGame}>{videoGame}</div>
             ))}
           </div>
         )}
@@ -50,7 +50,7 @@ function CharacterCard({ character }) {
           <div>
             <div className="fw-bold">Park Attractions</div>
             {character.parkAttractions.map((parkAttraction) => (
-              <div>{parkAttraction}</div>
+              <div key={parkAttraction}>{parkAttraction}</div>
             ))}
           </div>
         )}

@@ -1,42 +1,32 @@
 import { useEffect, useState } from "react";
 import CharacterCard from "./Components/CharacterCard";
 
-// Instructions
-// Create a React application that pulls data from this API (https://disneyapi.dev/)
-// and outputs the responses as Cards using the Bootstrap 5 Framework
-
-// There should be an input box to filter the Cards based on the character's name
-// and the ability to sort the Cards alphabetically. When completed, please provide
-// a link to Repo with the relevant files and build instructions included.
-
-// dynamic search terms, no of results as you filter down
-
 function App() {
   const [filter, setFilter] = useState("");
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [resultsCount, setResultsCount] = useState(40);
 
+  // Gets all characters from the API
   useEffect(() => {
-    if (!data.length) {
+    if (data.length < 1) {
       let firstUrl = `https://api.disneyapi.dev/characters`;
       let allCharacters = [];
 
+      console.log(" *** GETTING DATA FROM API *** ");
       const getData = async (url) => {
         await fetch(url)
           .then((res) => res.json())
           .then((page) => {
             allCharacters = [...allCharacters, ...page.data];
-            console.log(
-              "calling getData from API",
-              page.nextPage[page.nextPage.length - 1]
-            );
+            sortData(allCharacters);
             setData(allCharacters);
             setFilteredData(allCharacters);
 
-            // if (page.nextPage) getData(page.nextPage); // view all 7k+ results
-            if (page.nextPage && page.nextPage[page.nextPage.length - 1] < 9)
-              getData(page.nextPage); // view only first 100 results
+            if (page.nextPage) getData(page.nextPage); // view all 7k+ results
+
+            // if (page.nextPage && page.nextPage[page.nextPage.length - 1] < 4)
+            //   getData(page.nextPage); // Limit @ 150 results
           });
       };
 
@@ -44,21 +34,53 @@ function App() {
     }
   }, []);
 
-  console.log("App Component", data, filter);
+  // Shows more cards for infinite scrolling
+  const showMore = () => {
+    const bottom =
+      Math.ceil(window.innerHeight + window.scrollY) >=
+      document.documentElement.scrollHeight;
 
+    if (bottom && resultsCount < filteredData.length) {
+      setTimeout(() => {
+        setResultsCount(resultsCount + 40);
+      }, 1200);
+    }
+  };
+
+  // Listens for bottom of page for infinite scrolling
+  useEffect(() => {
+    window.addEventListener("scroll", showMore, {
+      passive: true,
+    });
+  });
+
+  // Filters cards by character name based on user input
   const filterData = (e) => {
-    setFilter(e.target.value);
-
     let results = data.filter((character) =>
       character.name.toLowerCase().includes(e.target.value.toLowerCase())
     );
 
+    setFilter(e.target.value);
     setFilteredData(results);
   };
 
+  // Clears user input to filter cards
   const clearFilter = (e) => {
     setFilteredData(data);
     setFilter("");
+  };
+
+  // Sorts character cards alphabetically my name
+  const sortData = (e) => {
+    const sorted = filteredData.sort((a, b) => {
+      const nameA = a.name.toUpperCase();
+      const nameB = b.name.toUpperCase();
+      if (nameA < nameB) return -1;
+      if (nameA > nameB) return 1;
+      return 0;
+    });
+
+    setFilteredData(sorted);
   };
 
   return (
@@ -70,7 +92,7 @@ function App() {
         <div className="input-group mb-3 pt-4">
           <input
             type="text"
-            class="form-control"
+            className="form-control"
             placeholder="Search for characters by name"
             aria-label="Username"
             aria-describedby="basic-addon1"
@@ -78,7 +100,7 @@ function App() {
             onChange={filterData}
           />
           <button
-            class="input-group-text"
+            className="input-group-text btn-secondary"
             id="basic-addon1"
             onClick={clearFilter}
           >
@@ -87,25 +109,25 @@ function App() {
         </div>
 
         <div className="d-flex justify-content-between">
-          <div className="text-muted">
-            {filter.length > 0 && <>{filteredData.length} Results</>}
+          <div className="text-muted d-flex align-items-center">
+            {filter.length > 0 && (
+              <>
+                {filteredData.length} Results for "{filter}"
+              </>
+            )}
           </div>
-          <button
-            className="btn btn-light"
-            onClick={(e) =>
-              setFilteredData(filteredData.sort((a, b) => a.name - b.name))
-            }
-          >
+          <button className="btn btn-secondary" onClick={sortData}>
             Sort by A-Z
           </button>
         </div>
       </div>
 
+      {/* Card grid container */}
       <div className="container">
         {filteredData.length > 0 && (
           <div className="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-2">
             {filteredData.slice(0, resultsCount).map((char, i) => (
-              <div className="col">
+              <div className="col" key={i}>
                 <CharacterCard character={char} />
               </div>
             ))}
@@ -113,26 +135,10 @@ function App() {
         )}
       </div>
 
+      {/* Nav back to top */}
       <div className="container d-flex flex-row-reverse bd-highlight pt-4 pb-4">
-        {resultsCount < filteredData.length && (
-          <button
-            className="btn btn-light"
-            onClick={(e) => setResultsCount(resultsCount + 40)}
-          >
-            View more
-          </button>
-        )}
-        {resultsCount > 40 && (
-          <button
-            className="btn btn-light"
-            onClick={(e) => setResultsCount(resultsCount - 40)}
-          >
-            View less
-          </button>
-        )}
-
-        <a href="#top">
-          <button className="btn btn-light">Back to top</button>
+        <a href="#top" className="m-1">
+          <button className="btn btn-primary mb-5">Back to top</button>
         </a>
       </div>
     </div>
