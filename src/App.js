@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import CharacterCard from "./Components/CharacterCard";
+import SortCards from "./Components/SortCards";
+import Filter from "./Components/Filter";
 
 function App() {
   const [filter, setFilter] = useState("");
@@ -52,65 +54,20 @@ function App() {
     });
   });
 
-  // Filters cards by character name based on user input
-  const filterData = (e) => {
-    setFilter(e.target.value);
-
-    let results = data.filter((character) =>
-      character.name.toLowerCase().includes(e.target.value.toLowerCase())
-    );
-
-    setFilteredData(results);
-  };
-
-  // Clears user input to filter cards
-  const clearFilter = (e) => {
-    setFilteredData(data);
-    setFilter("");
-  };
-
-  // Sorts character cards alphabetically my name
-  const sortData = (e) => {
-    const sorted = [...filteredData].sort((a, b) => {
-      const nameA = a.name.toUpperCase();
-      const nameB = b.name.toUpperCase();
-      if (nameA < nameB) return -1;
-      if (nameA > nameB) return 1;
-      return 0;
-    });
-
-    setFilteredData(sorted);
-  };
-
   return (
     <div>
       <div className="container pt-4 pb-4">
         <h1 id="top" className="pt-4">
           Disney Character Explorer
         </h1>
-        <div className="input-group mb-3 pt-4">
-          <input
-            type="text"
-            className="form-control"
-            placeholder={
-              inputDisabled
-                ? "Currently loading all characters..."
-                : "Search for characters by name"
-            }
-            aria-label="Username"
-            aria-describedby="basic-addon1"
-            value={filter}
-            onChange={filterData}
-            disabled={inputDisabled}
-          />
-          <button
-            className="input-group-text btn-secondary"
-            id="basic-addon1"
-            onClick={clearFilter}
-          >
-            Reset
-          </button>
-        </div>
+
+        <Filter
+          setFilteredData={setFilteredData}
+          data={data}
+          inputDisabled={inputDisabled}
+          setFilter={setFilter}
+          filter={filter}
+        />
 
         <div className="d-flex justify-content-between">
           <div className="text-muted d-flex align-items-center">
@@ -120,9 +77,11 @@ function App() {
               </>
             )}
           </div>
-          <button className="btn btn-secondary" onClick={sortData}>
-            Sort by A-Z
-          </button>
+
+          <SortCards
+            filteredData={filteredData}
+            setFilteredData={setFilteredData}
+          />
         </div>
       </div>
 
