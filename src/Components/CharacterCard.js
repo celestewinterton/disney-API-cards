@@ -8,12 +8,12 @@ function CharacterCard({ character }) {
         src={character.imageUrl}
         className="card-img-top"
         alt="image of the character"
-        style={{ height: "400px", objectFit: "cover" }}
+        style={{ height: "320px", objectFit: "cover" }}
       />
       <div className="card-body">
         <h5 className="card-title">{character.name}</h5>
-        <p className="card-text"></p>
 
+        {/* TV */}
         {character.tvShows.length > 0 && (
           <div>
             <div className="fw-bold">TV Shows</div>
@@ -22,6 +22,8 @@ function CharacterCard({ character }) {
             ))}
           </div>
         )}
+
+        {/* Films & Short Films */}
         {character.films.length > 0 && (
           <div>
             <div className="fw-bold">Films</div>
@@ -38,14 +40,18 @@ function CharacterCard({ character }) {
             ))}
           </div>
         )}
+
+        {/* Games */}
         {character.videoGames.length > 0 && (
           <div>
-            <div className="fw-bold">Video Game</div>
+            <div className="fw-bold">Games</div>
             {character.videoGames.map((videoGame) => (
               <div key={videoGame}>{videoGame}</div>
             ))}
           </div>
         )}
+
+        {/* Park Attractions */}
         {character.parkAttractions.length > 0 && (
           <div>
             <div className="fw-bold">Park Attractions</div>

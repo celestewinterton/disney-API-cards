@@ -3,30 +3,28 @@ import CharacterCard from "./Components/CharacterCard";
 
 function App() {
   const [filter, setFilter] = useState("");
-  const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [resultsCount, setResultsCount] = useState(40);
+  const [data, setData] = useState([]);
+  const [inputDisabled, setInputDisabled] = useState(true);
 
   // Gets all characters from the API
   useEffect(() => {
-    if (data.length < 1) {
+    if (!data.length) {
       let firstUrl = `https://api.disneyapi.dev/characters`;
       let allCharacters = [];
 
-      console.log(" *** GETTING DATA FROM API *** ");
       const getData = async (url) => {
         await fetch(url)
           .then((res) => res.json())
           .then((page) => {
             allCharacters = [...allCharacters, ...page.data];
-            sortData(allCharacters);
             setData(allCharacters);
             setFilteredData(allCharacters);
 
             if (page.nextPage) getData(page.nextPage); // view all 7k+ results
-
-            // if (page.nextPage && page.nextPage[page.nextPage.length - 1] < 4)
-            //   getData(page.nextPage); // Limit @ 150 results
+            // Change condition to view less -> Ex: (page.nextPage && page.nextPage[page.nextPage.length - 1] < 4)
+            else setInputDisabled(false);
           });
       };
 
@@ -56,11 +54,12 @@ function App() {
 
   // Filters cards by character name based on user input
   const filterData = (e) => {
+    setFilter(e.target.value);
+
     let results = data.filter((character) =>
       character.name.toLowerCase().includes(e.target.value.toLowerCase())
     );
 
-    setFilter(e.target.value);
     setFilteredData(results);
   };
 
@@ -72,7 +71,7 @@ function App() {
 
   // Sorts character cards alphabetically my name
   const sortData = (e) => {
-    const sorted = filteredData.sort((a, b) => {
+    const sorted = [...filteredData].sort((a, b) => {
       const nameA = a.name.toUpperCase();
       const nameB = b.name.toUpperCase();
       if (nameA < nameB) return -1;
@@ -93,11 +92,16 @@ function App() {
           <input
             type="text"
             className="form-control"
-            placeholder="Search for characters by name"
+            placeholder={
+              inputDisabled
+                ? "Currently loading all characters..."
+                : "Search for characters by name"
+            }
             aria-label="Username"
             aria-describedby="basic-addon1"
             value={filter}
             onChange={filterData}
+            disabled={inputDisabled}
           />
           <button
             className="input-group-text btn-secondary"
