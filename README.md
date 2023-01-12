@@ -20,6 +20,6 @@ A simple application that takes data from the [Disney API](https://disneyapi.dev
 
 3. To start the server, run the command below and open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-`npm start`
+   `npm start`
 
-4. Start using the app to find your favorite characters!
+4. Start using the app to find your favorite characters!  
